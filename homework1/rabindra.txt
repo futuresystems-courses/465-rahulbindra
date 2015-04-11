@@ -4,5 +4,8 @@ git add helps git track the changes in a file and move it from untracked
 state to staging state for a future save
 git commit saves the filewith changes present in the stating area and 
 moves the status for these from stating state to tracked state
-
-
+git push saves the changes from the current branch to the master branch 
+of the remote repository. This is used to save the work to a remote 
+repository (such as github)
+git pull is the opposite of push and save the current version of remote 
+repository into the current (local) repository 
