@@ -1,0 +1,8 @@
+git clone is used to get a complete copy of the project from gi on to the 
+local machine
+git add helps git track the changes in a file and move it from untracked 
+state to staging state for a future save
+git commit saves the filewith changes present in the stating area and 
+moves the status for these from stating state to tracked state
+
+
