@@ -1,0 +1,14 @@
+---
+- hosts: ansible-test
+  remote_user: root
+  tasks:
+  - name: Import publick key used by package management system
+    apt_key: keyserver=hkp://keyserver.ubuntu.com:80 id=7F0CEB10 state=present
+  - name: Install apache2 package 
+    apt: pkg=apache2 state=latest
+    notify:
+    - start apache2
+  handlers:
+    - name: start apache2
+      service: name=apache2 state=started
+ 
