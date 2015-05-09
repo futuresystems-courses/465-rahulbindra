@@ -1,0 +1,138 @@
+Script started on Sat 09 May 2015 04:43:26 PM EDT
+torque/2.5.5 version 2.5.5 loaded
+moab version 5.4.0 loaded
+git version 2.2.1 loaded
+]0;rabindra@i136:~/465-rahulbindra/homework4/openstack-heat(ENV)[rabindra@i136 openstack-heat]$ nano rabindra_heat_ex2.yaml
+[?1049h[1;44r(B[m[4l[?7h[?12l[?25h[?1h=[?1h=[?1h=[39;49m[39;49m(B[m[H[2J(B[0;7m  GNU nano 1.3.12                                       File: rabindra_heat_ex2.yaml                                                                                    [42;79H[ New File ][43d^G(B[m Get Help[43;29H(B[0;7m^O(B[m WriteOut[43;57H(B[0;7m^R(B[m Read File[43;85H(B[0;7m^Y(B[m Prev Page[43;113H(B[0;7m^K(B[m Cut Text[43;141H(B[0;7m^C(B[m Cur Pos[44d(B[0;7m^X(B[m Exit[44;29H(B[0;7m^J(B[m Justify[44;57H(B[0;7m^W(B[m Where Is[44;85H(B[0;7m^V(B[m Next Page[44;113H(B[0;7m^U(B[m UnCut Text[44;141H(B[0;7m^T(B[m To Spell[3d[1;159H(B[0;7mModified[3d(B[mheat_template_version: 2013-05-23[42d[K[4d[5ddescription: >[6d  Heat WordPress template on Fedora 21, using only Heat OpenStack-native[7d  resource types (adapted from  HOT examples), and without the requirement for[8d  heat-cfntools in the image.  WordPress is web software you can use to create[9d  a beautiful website or blog.[10d  This template installs a single-instance WordPress deployment using a local[11d  MySQL database to store the data.[13dparameters:[15;3Hkey_name:[16d    type: string[17d    description : Name of a KeyPair to enable SSH access to the instance[18d  instance_type:[19d    type: string[20d    description: Instance type for WordPress server[21d    default: m1.small[22d    constraints:[23d[7G- allowed_values: [m1.small, m1.medium, m1.large][24d[24;9Hdescription: instance_type must be one of m1.small, m1.medium or m1.large[25d  image_id:[26d    type: string[27d    description: >[28d[7GName or ID of the image to use for the WordPress server.[29d[7GRecommended values are fedora-20.i386 or fedora-20.x86_64;[30d[7Gget them from http://cloud.fedoraproject.org/fedora-20.i386.qcow2[31d[7Gor http://cloud.fedoraproject.org/fedora-20.x86_64.qcow2.[32d[7GFuturesystems has fedora-21.[33d    default: futuresystems/fedora-21[34d[35d  db_name:[36d    type: string[37d    description: WordPress database name[38d    default: wordpress[39d    constraints:[40d[7G- length: { min: 1, max: 64 }[41d7[2;42r8[42d[20S[1;44r[2;1H[K[21;9Hdescription: db_name must be between 1 and 64 characters[22d[7G- allowed_pattern: '[a-zA-Z][a-zA-Z0-9]*'[23d[23;9Hdescription: >[24d[24;11Hdb_name must begin with a letter and contain only alphanumeric[25d[25;11Hcharacters[26d  db_username:[27d    type: string[28d    description: The WordPress database admin account username[29d    default: admin[30d    hidden: true[31d    constraints:[32d[7G- length: { min: 1, max: 16 }[33d[33;9Hdescription: db_username must be between 1 and 16 characters[34d[7G- allowed_pattern: '[a-zA-Z][a-zA-Z0-9]*'[35d[35;9Hdescription: >[36d[36;11Hdb_username must begin with a letter and contain only alphanumeric[37d[37;11Hcharacters[38;3Hdb_password:[39d[3;42r[42;1H[20S[1;44r[19;5Htype: string[20;5Hdescription: The WordPress database admin account password[21;5Hdefault: admin[22;5Hhidden: true[23d    constraints:[24;7H- length: { min: 1, max: 41 }[25;9Hdescription: db_password must be between 1 and 41 characters[26;7H- allowed_pattern: '[a-zA-Z0-9]*'[27d[27;9Hdescription: db_password must contain only alphanumeric characters[28;3Hdb_root_password:[29d    type: string[30;5Hdescription: Root password for MySQL[31d    default: admin[32d    hidden: true[33d    constraints:[34d[7G- length: { min: 1, max: 41 }[35d[35;9Hdescription: db_root_password must be between 1 and 41 characters[36d[7G- allowed_pattern: '[a-zA-Z0-9]*'[37d[37;9Hdescription: db_root_password must contain only alphanumeric characters[38d[39dresources:[40d  security_group:[41d7[2;42r8[42d[20S[1;44r[2;1H[K[21;5Htype: AWS::EC2::SecurityGroup[22d    properties:[23d[7GGroupDescription: "SSH (22), HTTP (80)"[24d[7GSecurityGroupIngress:[25d[7G- IpProtocol: "tcp"[26d[26;9HFromPort: "22"[27d[27;9HToPort : "22"[28d[28;9HCidrIp : "0.0.0.0/0"[29d[7G- IpProtocol: "tcp"[30d[30;9HFromPort: "80"[31d[31;9HToPort: "80"[32d[32;9HCidrIp: "0.0.0.0/0"[33d  floatingip:[34d    type: OS::Nova::FloatingIP[35d    properties:[36d[7Gpool: ext-net[37;3Hwordpress_instance:[38;5Htype: OS::Nova::Server[39d    properties:[40d[3;42r[42;1H[20S[1;44r[20;7Himage: { get_param: image_id }[21;7Hflavor: { get_param: instance_type }[22;7Hkey_name: { get_param: key_name }[23d[7Gsecurity_groups:[24;9H- "default"[25;9H- { get_resource: security_group }[26;7Huser_data:[27;9Hstr_replace:[28;11Htemplate: |[29;13H#!/bin/bash -v[31;13Hyum -y install mariadb mariadb-server httpd wordpress[32d[32;13Htouch /var/log/mariadb/mariadb.log[33;13Hchown mysql.mysql /var/log/mariadb/mariadb.log[34;13Hsystemctl start mariadb.service[36d[36;13H# Setup MySQL root password and create a user[37;13Hmysqladmin -u root password db_rootpassword[38;13Hcat << EOF | mysql -u root --password=db_rootpassword[39d[39;13HCREATE DATABASE db_name;[40;13HGRANT ALL PRIVILEGES ON db_name.* TO "db_user"@"localhost"[41d7[3;42r8[42d[20S[1;44r[21;13HIDENTIFIED BY "db_password";[22;13HFLUSH PRIVILEGES;[23;13HEXIT[24d[24;13HEOF[26d[26;13Hsed -i "/Deny from All/d" /etc/httpd/conf.d/wordpress.conf[27;13Hsed -i "s/Require local/Require all granted/" /etc/httpd/conf.d/wordpress.conf[28d[28;13Hsed -i s/database_name_here/db_name/ /etc/wordpress/wp-config.php[29;13Hsed -i s/username_here/db_user/ /etc/wordpress/wp-config.php[30;13Hsed -i s/password_here/db_password/ /etc/wordpress/wp-config.php[31d[32;13Hsystemctl stop httpd.service[33;13Hsystemctl start httpd.service[34;11Hparams:[35d[35;13Hdb_rootpassword: { get_param: db_root_password }[36;13Hdb_name: { get_param: db_name }[37d[37;13Hdb_user: { get_param: db_username }[38;13Hdb_password: { get_param: db_password }[39d[2;42r[42;1H[20S[1;44r[2;1H[K[19d  association:[20;5Htype: OS::Nova::FloatingIPAssociation[21;5Hproperties:[22d[7Gfloating_ip: { get_resource: floatingip }[23;7Hserver_id: { get_resource: 'wordpress_instance' }[24d[25doutputs:[26;3HWebsiteURL:[27d    description: URL for Wordpress wiki[28;5Hvalue:[29;7Hstr_replace:[30d[30;9Htemplate: http://host/wordpress[31;9Hparams:[32d[32;11Hhost: { get_attr: [ floatingip, ip ] }[31;16H[30;40H[29;19H[28;11H[27;40H[26;14H[A	[A[23;49H[A[21;16H[20;42H[19;15H[18;49H[A[A[A	[14;18H[13;42H[A[Z[A[10;49H[A[A[A[A[A[4;16H[A	[2;41r[2;1H[19T[1;44r[3;9H- "default"[4;9H- { get_resource: security_group }[5;7Huser_data:[6;9Hstr_replace:[7;11Htemplate: |[8;13H#!/bin/bash -v[10;13Hyum -y install mariadb mariadb-server httpd wordpress[11;13Htouch /var/log/mariadb/mariadb.log[12;13Hchown mysql.mysql /var/log/mariadb/mariadb.log[13;13Hsystemctl start mariadb.service[15;13H# Setup MySQL root password and create a user[16;13Hmysqladmin -u root password db_rootpassword[17;13Hcat << EOF | mysql -u root --password=db_rootpassword[18;13HCREATE DATABASE db_name;[19;13HGRANT ALL PRIVILEGES ON db_name.* TO "db_user"@"localhost"[20;13HIDENTIFIED BY "db_password";[21;13HFLUSH PRIVILEGES;[20;41H[19;49H[18;37H[17;49H[A[A[A[13;44H[A	[A[A	[A[8;27H[7;22H[A[A[Z[4;43H[3;20H[2;41r[2;1H[19T[1;44r[3;7H- IpProtocol: "tcp"[4;9HFromPort: "22"[5;9HToPort : "22"[6;9HCidrIp : "0.0.0.0/0"[7;7H- IpProtocol: "tcp"[8;9HFromPort: "80"[9;9HToPort: "80"[10;9HCidrIp: "0.0.0.0/0"[11;3Hfloatingip:[12;5Htype: OS::Nova::FloatingIP[13;5Hproperties:[14;7Hpool: ext-net[15;3Hwordpress_instance:[16;5Htype: OS::Nova::Server[17;5Hproperties:[18;7Himage: { get_param: image_id }[19;7Hflavor: { get_param: instance_type }[20;7Hkey_name: { get_param: key_name }[21;7Hsecurity_groups: [20;40H[A	 }[18;37H[17;16H[16;27H[15;22H[A[A[Z[12;31H[11;14H[10;28H[9;21H[A0"[A	"[A/0"[5;22H[A"[A	"[2;41r[2;1H[19T[1;44r[3;7H- allowed_pattern: '[a-zA-Z0-9]*'[4;9Hdescription: db_password must contain only alphanumeric characters[5;3Hdb_root_password:[6;5Htype: string[7;5Hdescription: Root password for MySQL[8;5Hdefault: admin[9;5Hhidden: true[10;5Hconstraints:[11;7H- length: { min: 1, max: 41 }[12;9Hdescription: db_root_password must be between 1 and 41 characters[13;7H- allowed_pattern: '[a-zA-Z0-9]*'[14;9Hdescription: db_root_password must contain only alphanumeric characters[16dresources:[17;3Hsecurity_group:[18;5Htype: AWS::EC2::SecurityGroup[19;5Hproperties:[20;7HGroupDescription: "SSH (22), HTTP (80)"[21;7HSecurityGroupIngress:[19;16H[18;34H[17;18H[16;11H[A[14;49H[13;40H[12;49H[11;36H[10;17H[A[Ain[7;41H[6;17H[Ard:[4;49H[3;40H[2;41r[2;1H[19T[1;44r[3;5Htype: string[4;5Hdescription: The WordPress database admin account username[5;5Hdefault: admin[6;5Hhidden: true[7;5Hconstraints:[8;7H- length: { min: 1, max: 16 }[9;9Hdescription: db_username must be between 1 and 16 characters[10;7H- allowed_pattern: '[a-zA-Z][a-zA-Z0-9]*'[11;9Hdescription: >[12;11Hdb_username must begin with a letter and contain only alphanumeric[13;11Hcharacters[14;3Hdb_password:[15;5Htype: string[16;5Hdescription: The WordPress database admin account password[17;5Hdefault: admin[18;5Hhidden: true[19;5Hconstraints:[20;7H- length: { min: 1, max: 41 }[21;9Hdescription: db_password must be between 1 and 41 characters[21;49H[20;36H[19;17H[A[Ain[16;49H[15;17H[A[13;21H[12;49H[11;23H[10;48H[A	[8;36H[7;17H[A[Ain[4;49H[3;17H[2;41r[2;1H[19T[1;44r[3;7HName or ID of the image to use for the WordPress server.[4;7HRecommended values are fedora-20.i386 or fedora-20.x86_64;[5;7Hget them from http://cloud.fedoraproject.org/fedora-20.i386.qcow2[6;7Hor http://cloud.fedoraproject.org/fedora-20.x86_64.qcow2.[7;7HFuturesystems has fedora-21.[8;5Hdefault: futuresystems/fedora-21[10;3Hdb_name:[11;5Htype: string[12;5Hdescription: WordPress database name[13;5Hdefault: wordpress[14;5Hconstraints:[15;7H- length: { min: 1, max: 64 }[16;9Hdescription: db_name must be between 1 and 64 characters[17;7H- allowed_pattern: '[a-zA-Z][a-zA-Z0-9]*'[18;9Hdescription: >[19;11Hdb_name must begin with a letter and contain only alphanumeric[20;11Hcharacters[21;3Hdb_username:[20;21H[19;49H[18;23H[17;48H[A	[15;36H[14;17H[13;23H[12;41H[11;17H[A	e:[A[8;37H[A[6;49H[A[A[A[2;41r[2;1H[19T[1;44r[3;3Ha beautiful website or blog.[4;3HThis template installs a single-instance WordPress deployment using a local[5;3HMySQL database to store the data.[7dparameters:[9;3Hkey_name:[10;5Htype: string[11;5Hdescription : Name of a KeyPair to enable SSH access to the instance[12;3Hinstance_type:[13;5Htype: string[14;5Hdescription: Instance type for WordPress server[15;5Hdefault: m1.small[16;5Hconstraints:[17;7H- allowed_values: [m1.small, m1.medium, m1.large][18;9Hdescription: instance_type must be one of m1.small, m1.medium or m1.large[19;3Himage_id:[20;5Htype: string[21;5Hdescription: >[A[Z[19;12H[18;49H[A[16;17H[15;22H[14;49H[13;17H[A[11;49H[10;17H[9;12H[A[7;12H[A[5;36H[4;49H[3;31H[2;41r[2;1H[6T[1;44r[3;1Hheat_template_version: 2013-05-23[5ddescription: >[6;3HHeat WordPress template on Fedora 21, using only Heat OpenStack-native[7;3Hresource types (adapted from  HOT examples), and without the requirement for[8;3Hheat-cfntools in the image.  WordPress is web software you can use to create[8;49H[A[A[5;15H[A[3;34H[4d[5;15H[6;49H[7d[8d[9;31H[10;49H[11;36H[12d[13;12H[14d[15;12H[16d	[17;49H[17;73H7[18;41r8[18dM[1;44r[18;1H    default: rabindra-key[42d(B[0;7mSave modified buffer (ANSWERING "No" WILL DESTROY CHANGES) ?                                                                                                            [43;1H Y(B[m Yes[K[44d(B[0;7m N(B[m No  [44;17H(B[0;7m^C(B[m Cancel[K[42;62H(B[0;7mFile Name to Write: rabindra_heat_ex2.yaml                  [43d^G(B[m Get Help[43;43H(B[0;7m^T(B[m To Files[43;85H(B[0;7mM-M(B[m Mac Format[43;127H(B[0;7mM-P(B[m Prepend[44d(B[0;7m^C(B[m Cancel	         [44;43H(B[0;7mM-D(B[m DOS Format[44;85H(B[0;7mM-A(B[m Append[44;127H(B[0;7mM-B(B[m Backup File[42;43H[43d[39;49m(B[m[J[1;159H(B[0;7m        [42;74H(B[m[1K (B[0;7m[ Wrote 151 lines ](B[m[K[44;168H[44;1H[?1049l[?1l>]0;rabindra@i136:~/465-rahulbindra/homework4/openstack-heat(ENV)[rabindra@i136 openstack-heat]$ nano rabindra_heat_ex2.yamlexit[Kheat stack-delete heat-ex1-rabindra[2Pshow[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[42@ heat stack-create --template-file rabindra_heat_ex1.yaml[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[40Pheat stack-delete[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[10Psource ~/ENV/bin/activateheat stack-delete heat-ex1-rabindra[40@ heat stack-create --template-file rabindra_heat_ex1.yaml[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[42Pheat stack-show[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[2@delete[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cexit[Kheat stack-delete heat-ex1-rabindra[2Pshow[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[42@ heat stack-create --template-file rabindra_heat_ex1.yaml[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1P[1@2[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1P-rabindra2-rabindra[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1P
++--------------------------------------+---------------------+--------------------+----------------------+
+| id                                   | stack_name          | stack_status       | creation_time        |
++--------------------------------------+---------------------+--------------------+----------------------+
+| 1188abc9-3145-4e76-817f-177ecbaff6c4 | heat-ex1            | CREATE_COMPLETE    | 2015-05-02T17:50:45Z |
+| cd9bc632-8cd2-4b05-9b3e-34a22aee8a8f | drewmullen_heat_ex2 | CREATE_FAILED      | 2015-05-08T12:43:07Z |
+| 75b246eb-56f2-463e-b4d5-c5552fb18e7e | heat-ex1-rabindra   | CREATE_COMPLETE    | 2015-05-09T19:29:29Z |
+| aff8e33d-010a-4145-99c8-cd54cbe3e10e | heat-ex2-rabindra   | CREATE_IN_PROGRESS | 2015-05-09T20:45:16Z |
++--------------------------------------+---------------------+--------------------+----------------------+
+]0;rabindra@i136:~/465-rahulbindra/homework4/openstack-heat(ENV)[rabindra@i136 openstack-heat]$ heat stack-list
++--------------------------------------+---------------------+--------------------+----------------------+
+| id                                   | stack_name          | stack_status       | creation_time        |
++--------------------------------------+---------------------+--------------------+----------------------+
+| 1188abc9-3145-4e76-817f-177ecbaff6c4 | heat-ex1            | CREATE_COMPLETE    | 2015-05-02T17:50:45Z |
+| cd9bc632-8cd2-4b05-9b3e-34a22aee8a8f | drewmullen_heat_ex2 | CREATE_FAILED      | 2015-05-08T12:43:07Z |
+| 75b246eb-56f2-463e-b4d5-c5552fb18e7e | heat-ex1-rabindra   | CREATE_COMPLETE    | 2015-05-09T19:29:29Z |
+| aff8e33d-010a-4145-99c8-cd54cbe3e10e | heat-ex2-rabindra   | CREATE_IN_PROGRESS | 2015-05-09T20:45:16Z |
++--------------------------------------+---------------------+--------------------+----------------------+
+]0;rabindra@i136:~/465-rahulbindra/homework4/openstack-heat(ENV)[rabindra@i136 openstack-heat]$ heat stack-list
++--------------------------------------+---------------------+--------------------+----------------------+
+| id                                   | stack_name          | stack_status       | creation_time        |
++--------------------------------------+---------------------+--------------------+----------------------+
+| 1188abc9-3145-4e76-817f-177ecbaff6c4 | heat-ex1            | CREATE_COMPLETE    | 2015-05-02T17:50:45Z |
+| cd9bc632-8cd2-4b05-9b3e-34a22aee8a8f | drewmullen_heat_ex2 | CREATE_FAILED      | 2015-05-08T12:43:07Z |
+| 75b246eb-56f2-463e-b4d5-c5552fb18e7e | heat-ex1-rabindra   | CREATE_COMPLETE    | 2015-05-09T19:29:29Z |
+| aff8e33d-010a-4145-99c8-cd54cbe3e10e | heat-ex2-rabindra   | CREATE_IN_PROGRESS | 2015-05-09T20:45:16Z |
++--------------------------------------+---------------------+--------------------+----------------------+
+]0;rabindra@i136:~/465-rahulbindra/homework4/openstack-heat(ENV)[rabindra@i136 openstack-heat]$ heat stack-list
++--------------------------------------+---------------------+-----------------+----------------------+
+| id                                   | stack_name          | stack_status    | creation_time        |
++--------------------------------------+---------------------+-----------------+----------------------+
+| 1188abc9-3145-4e76-817f-177ecbaff6c4 | heat-ex1            | CREATE_COMPLETE | 2015-05-02T17:50:45Z |
+| cd9bc632-8cd2-4b05-9b3e-34a22aee8a8f | drewmullen_heat_ex2 | CREATE_FAILED   | 2015-05-08T12:43:07Z |
+| 75b246eb-56f2-463e-b4d5-c5552fb18e7e | heat-ex1-rabindra   | CREATE_COMPLETE | 2015-05-09T19:29:29Z |
+| aff8e33d-010a-4145-99c8-cd54cbe3e10e | heat-ex2-rabindra   | CREATE_COMPLETE | 2015-05-09T20:45:16Z |
++--------------------------------------+---------------------+-----------------+----------------------+
+]0;rabindra@i136:~/465-rahulbindra/homework4/openstack-heat(ENV)[rabindra@i136 openstack-heat]$ noiv[K[Kva list | grep rabindra_heat_ex
+]0;rabindra@i136:~/465-rahulbindra/homework4/openstack-heat(ENV)[rabindra@i136 openstack-heat]$ nova list | grep rabindra_heat_ex\\[K[K[K[K[K[K[K[K[K[K[Ka
+| 424a2319-1fb9-41c7-82b9-35d53a4eaae2 | heat-ex2-rabindra-wordpress_instance-7c5b4swoiobn          | ACTIVE | -          | Running     | int-net=10.23.3.14, 149.165.159.61   |
+| e21a2e42-1ec7-49ad-b708-857ec3a33159 | rabindra-001                                               | ACTIVE | -          | Running     | int-net=10.23.0.208, 149.165.158.224 |
+| 6050caae-2b55-4068-adc5-34ca855ce68e | rabindra_ansible-6050caae-2b55-4068-adc5-34ca855ce68e      | ACTIVE | -          | Running     | int-net=10.23.1.23                   |
+]0;rabindra@i136:~/465-rahulbindra/homework4/openstack-heat(ENV)[rabindra@i136 openstack-heat]$ curl -L http://149.165.159.61/wordp[[Kress
+curl: (7) couldn't connect to host
+]0;rabindra@i136:~/465-rahulbindra/homework4/openstack-heat(ENV)[rabindra@i136 openstack-heat]$ curl -L http://149.165.159.61/wordpress
+curl: (7) couldn't connect to host
+]0;rabindra@i136:~/465-rahulbindra/homework4/openstack-heat(ENV)[rabindra@i136 openstack-heat]$ curl -L http://149.165.159.61/wordpress
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US" xml:lang="en-US">
+<head>
+	<meta name="viewport" content="width=device-width" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>WordPress &rsaquo; Installation</title>
+	<link rel='stylesheet' id='buttons-css'  href='http://149.165.159.61/wordpress/wp-includes/css/buttons.min.css?ver=4.1.1' type='text/css' media='all' />
+<link rel='stylesheet' id='open-sans-css'  href='//fonts.googleapis.com/css?family=Open+Sans%3A300italic%2C400italic%2C600italic%2C300%2C400%2C600&#038;subset=latin%2Clatin-ext&#038;ver=4.1.1' type='text/css' media='all' />
+<link rel='stylesheet' id='install-css'  href='http://149.165.159.61/wordpress/wp-admin/css/install.min.css?ver=4.1.1' type='text/css' media='all' />
+</head>
+<body class="wp-core-ui">
+<h1 id="logo"><a href="https://wordpress.org/" tabindex="-1">WordPress</a></h1>
+
+<h1>Welcome</h1>
+<p>Welcome to the famous five-minute WordPress installation process! Just fill in the information below and you&#8217;ll be on your way to using the most extendable and powerful personal publishing platform in the world.</p>
+
+<h1>Information needed</h1>
+<p>Please provide the following information. Don&#8217;t worry, you can always change these settings later.</p>
+
+<form id="setup" method="post" action="install.php?step=2" novalidate="novalidate">
+	<table class="form-table">
+		<tr>
+			<th scope="row"><label for="weblog_title">Site Title</label></th>
+			<td><input name="weblog_title" type="text" id="weblog_title" size="25" value="" /></td>
+		</tr>
+		<tr>
+			<th scope="row"><label for="user_login">Username</label></th>
+			<td>
+			<input name="user_name" type="text" id="user_login" size="25" value="" />
+				<p>Usernames can have only alphanumeric characters, spaces, underscores, hyphens, periods, and the @ symbol.</p>
+						</td>
+		</tr>
+				<tr>
+			<th scope="row">
+				<label for="pass1">Password, twice</label>
+				<p>A password will be automatically generated for you if you leave this blank.</p>
+			</th>
+			<td>
+				<input name="admin_password" type="password" id="pass1" size="25" value="" />
+				<p><input name="admin_password2" type="password" id="pass2" size="25" value="" /></p>
+				<div id="pass-strength-result">Strength indicator</div>
+				<p>Hint: The password should be at least seven characters long. To make it stronger, use upper and lower case letters, numbers, and symbols like ! " ? $ % ^ &amp; ).</p>
+			</td>
+		</tr>
+				<tr>
+			<th scope="row"><label for="admin_email">Your E-mail</label></th>
+			<td><input name="admin_email" type="email" id="admin_email" size="25" value="" />
+			<p>Double-check your email address before continuing.</p></td>
+		</tr>
+		<tr>
+			<th scope="row"><label for="blog_public">Privacy</label></th>
+			<td colspan="2"><label><input type="checkbox" name="blog_public" id="blog_public" value="1"  checked='checked' /> Allow search engines to index this site.</label></td>
+		</tr>
+	</table>
+	<p class="step"><input type="submit" name="Submit" value="Install WordPress" class="button button-large" /></p>
+	<input type="hidden" name="language" value="" />
+</form>
+<script type="text/javascript">var t = document.getElementById('weblog_title'); if (t){ t.focus(); }</script>
+<script type='text/javascript' src='http://149.165.159.61/wordpress/wp-includes/js/jquery/jquery.js?ver=1.11.1'></script>
+<script type='text/javascript' src='http://149.165.159.61/wordpress/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.2.1'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var _zxcvbnSettings = {"src":"http:\/\/149.165.159.61\/wordpress\/wp-includes\/js\/zxcvbn.min.js"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='http://149.165.159.61/wordpress/wp-includes/js/zxcvbn-async.min.js?ver=1.0'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var pwsL10n = {"empty":"Strength indicator","short":"Very weak","bad":"Weak","good":"Medium","strong":"Strong","mismatch":"Mismatch"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='http://149.165.159.61/wordpress/wp-admin/js/password-strength-meter.min.js?ver=4.1.1'></script>
+<script type='text/javascript' src='http://149.165.159.61/wordpress/wp-includes/js/underscore.min.js?ver=1.6.0'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var _wpUtilSettings = {"ajax":{"url":"\/wp-admin\/admin-ajax.php"}};
+/* ]]> */
+</script>
+<script type='text/javascript' src='http://149.165.159.61/wordpress/wp-includes/js/wp-util.min.js?ver=4.1.1'></script>
+<script type='text/javascript' src='http://149.165.159.61/wordpress/wp-admin/js/user-profile.min.js?ver=4.1.1'></script>
+<script type='text/javascript' src='http://149.165.159.61/wordpress/wp-admin/js/language-chooser.min.js?ver=4.1.1'></script>
+</body>
+</html>
+]0;rabindra@i136:~/465-rahulbindra/homework4/openstack-heat(ENV)[rabindra@i136 openstack-heat]$ exit
+exit
+
+Script done on Sat 09 May 2015 04:54:09 PM EDT
