@@ -1,0 +1,29 @@
+---
+- hosts: ansible-test
+  remote_user: root
+  tasks:
+  - name: Import the public key used by the package management system
+    apt_key: keyserver=hkp://keyserver.ubuntu.com:80 id=7F0CEB10 state=present
+  - name : Download ezsetup
+    get_url: url=https://bootstrap.pypa.io/ez_setup.py dest=~/ mode=0440
+  - name : Execute script
+    command : 'sudo python ~/ez_setup.py'
+  - name : Install pip
+    command : 'sudo easy_install pip'
+  - name : Install virtualenv
+    command : 'sudo pip install virtualenv'
+  - name : Create a virtual environment
+    command : '/usr/local/bin/virtualenv /home/ubuntu/ENV'
+  - name : Install cloudmesh
+    pip : name=cloudmesh_base virtualenv='~/ENV'
+  - name : Install cmd3
+    pip : name=cmd3 virtualenv='~/ENV'
+  - name : Install git
+    apt : name=git state=latest
+  - name : Copy project repo contents
+    git : repo=https://github.com/adilmoujahid/DonorsChoose_Visualization
+          dest=/home/ubuntu/VisualizationProject
+  - name : Change permissions for main python file
+    command : 'sudo chmod 777 /home/ubuntu/VisualizationProject/app.py'
+  - name : Install Flask
+    pip : name=Flask virtualenv='~/ENV'
