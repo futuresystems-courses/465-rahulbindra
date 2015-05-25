@@ -19,7 +19,7 @@
   - name : Install git
     command : 'sudo apt-get install git'
   - name : Copy project repo contents
-    git : repo=https://github.com/adilmoujahid/DonorsChoose_Visualization
+    git : repo=https://github.com/futuresystems/465-rahulbindra
           dest=/home/ubuntu/VisualizationProject
   - name : Change permissions for main python file
     command : 'sudo chmod 777 /home/ubuntu/VisualizationProject/app.py'
