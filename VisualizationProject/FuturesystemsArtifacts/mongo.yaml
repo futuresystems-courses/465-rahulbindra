@@ -11,7 +11,7 @@
     notify:
     - start mongodb
   - name: Download data file
-    get_url: url=https://s3.amazonaws.com/open_data/csv/opendata_projects.zip dest=/home/ubuntu/VisualizationProject/ mode=0440
+    get_url: url=https://s3.amazonaws.com/open_data/csv/opendata_projects.zip dest=/home/ubuntu/VisualizationProject/ mode=777
   - name: Install unzip
     apt: pkg=unzip state=latest update_cache=yes
   - name: Unzip project data
