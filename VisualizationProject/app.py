@@ -30,4 +30,4 @@ def donorschoose_projects():
     return json_projects
 
 if __name__ == "__main__":
-    app.run(host='10.23.0.208',port=5000,debug=True)
+    app.run(host='IP_Internal',port=5000,debug=True)
