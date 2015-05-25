@@ -1,9 +1,10 @@
 ---
 - hosts: ansible-test
   remote_user: ubuntu
+  sudo: yes
   tasks:
   - name : Download ezsetup
-    get_url: url=https://bootstrap.pypa.io/ez_setup.py dest=~/ mode=0777
+    get_url: url=https://bootstrap.pypa.io/ez_setup.py dest=~/ mode=777
   - name : Execute script
     command : 'sudo python ~/ez_setup.py'
   - name : Install pip
@@ -17,11 +18,11 @@
   - name : Install cmd3
     pip : name=cmd3 virtualenv='~/ENV'
   - name : Install git
-    command : 'sudo apt-get install git'
+    apt : name=git
   - name : Copy project repo contents
     git : repo=https://github.com/futuresystems/465-rahulbindra
-          dest=/home/ubuntu/VisualizationProject
+          dest=/home/ubuntu/465-rahulbindra
   - name : Change permissions for main python file
-    command : 'sudo chmod 777 /home/ubuntu/VisualizationProject/app.py'
+    command : 'sudo chmod 777 /home/ubuntu/465-rahulbindra/VisualizationProject/app.py'
   - name : Install Flask
     pip : name=Flask virtualenv='~/ENV'
