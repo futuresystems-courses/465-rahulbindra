@@ -6,11 +6,11 @@
   - name : Download ezsetup
     get_url: url=https://bootstrap.pypa.io/ez_setup.py dest=~/ mode=777
   - name : Execute script
-    command : 'sudo python ~/ez_setup.py'
+    command : 'python ~/ez_setup.py'
   - name : Install pip
-    command : 'sudo easy_install pip'
+    command : 'easy_install pip'
   - name : Install virtualenv
-    command : 'sudo pip install virtualenv'
+    command : 'pip install virtualenv'
   - name : Create a virtual environment
     command : '/usr/local/bin/virtualenv /home/ubuntu/ENV'
   - name : Install cloudmesh
@@ -23,6 +23,6 @@
     git : repo=https://github.com/futuresystems/465-rahulbindra
           dest=/home/ubuntu/465-rahulbindra
   - name : Change permissions for main python file
-    command : 'sudo chmod 777 /home/ubuntu/465-rahulbindra/VisualizationProject/app.py'
+    command : 'chmod 777 /home/ubuntu/465-rahulbindra/VisualizationProject/app.py'
   - name : Install Flask
     pip : name=Flask virtualenv='~/ENV'
