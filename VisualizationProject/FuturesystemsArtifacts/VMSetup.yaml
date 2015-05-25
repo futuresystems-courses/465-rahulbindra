@@ -2,8 +2,6 @@
 - hosts: ansible-test
   remote_user: ubuntu
   tasks:
-  - name: Import the public key used by the package management system
-    apt_key: keyserver=hkp://keyserver.ubuntu.com:80 id=7F0CEB10 state=present
   - name : Download ezsetup
     get_url: url=https://bootstrap.pypa.io/ez_setup.py dest=~/ mode=0440
   - name : Execute script
