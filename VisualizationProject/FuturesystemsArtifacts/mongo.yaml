@@ -11,13 +11,9 @@
     notify:
     - start mongodb
   - name: Download data file
-    get_url: url=https://s3.amazonaws.com/open_data/csv/opendata_projects.zip dest=/home/ubuntu/VisualizationProject/ mode=777
-  - name: Install unzip
-    apt: pkg=unzip state=latest update_cache=yes
-  - name: Unzip project data
-    command: 'unzip /home/ubuntu/VisualizationProject/opendata_projects.zip'
+    get_url: url=https://drive.google.com/uc?export=download&id=0B16smR5Eh8ViZHBLS1BpWTJuRWM dest=/home/ubuntu/VisualizationProject/ mode=777
   - name: Load data into mongdb
-    command: 'mongoimport -d donorschoose -c projects --type csv --file opendata_projects.csv -headerline'
+    command: 'mongoimport -d donorschoose -c projects --type csv --file /home/ubuntu/opendata_projects.csv -headerline'
   handlers:
     - name: start mongodb
       service: name=mongod state=started
