@@ -13,10 +13,12 @@
     command : 'pip install virtualenv'
   - name : Create a virtual environment
     command : '/usr/local/bin/virtualenv /home/ubuntu/ENV'
+  - name : Activate virtual environment
+    command : 'source ~/ENV/bin/activate'
   - name : Install cloudmesh
-    pip : name=cloudmesh_base virtualenv='~/ENV'
+    pip : name=cloudmesh_base 
   - name : Install cmd3
-    pip : name=cmd3 virtualenv='~/ENV'
+    pip : name=cmd3 
   - name : Install git
     apt : name=git
   - name : Copy project repo contents
