@@ -13,8 +13,6 @@
     command : 'pip install virtualenv'
   - name : Create a virtual environment
     command : '/usr/local/bin/virtualenv /home/ubuntu/ENV'
-  - name : Activate virtual environment
-    command : 'source /home/ubuntu/ENV/bin/activate'
   - name : Install cloudmesh
     pip : name=cloudmesh_base 
   - name : Install cmd3
