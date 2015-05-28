@@ -12,7 +12,7 @@
     notify:
     - start mongodb
   - name: Download data file
-    get_url: url=https://drive.google.com/uc?export=download&id=0B16smR5Eh8ViZHBLS1BpWTJuRWM dest=/home/ubuntu/VisualizationProject/ mode=777
+    get_url: url=https://drive.google.com/uc?export=download&id=0B16smR5Eh8ViZHBLS1BpWTJuRWM dest=/home/ubuntu/ mode=777
   - name: Load data into mongdb
     command: 'mongoimport -d donorschoose -c projects --type csv --file /home/ubuntu/opendata_projects.csv -headerline'
   handlers:
