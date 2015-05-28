@@ -28,3 +28,5 @@
     command : 'chmod 777 /home/ubuntu/465-rahulbindra/VisualizationProject/app.py'
   - name : Install Flask
     pip : name=Flask virtualenv='~/ENV'
+  - name : Install pymongo
+    pip : name=pymongo virtualenv='~/ENV'
