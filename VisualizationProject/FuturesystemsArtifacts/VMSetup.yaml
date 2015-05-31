@@ -27,4 +27,4 @@
   - name : Install Flask
     command : 'sudo pip install Flask'
   - name : Install pymongo
-    command : ''sudo pip install pymongo'
+    command : 'sudo pip install pymongo'
