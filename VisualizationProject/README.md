@@ -6,7 +6,7 @@
 
 **Name:** Rahul Bindra
 
-**Link to reStructuredText format:** http://rst.ninjs.org/?n=27a12d178a2209f7880cc5136d945494&theme=nature
+**Link to reStructuredText format:** http://rst.ninjs.org/?n=fc4e9abb7e997bd31dce4e34cf7222d4&theme=nature
 
 ================
 **Introduction**
@@ -75,16 +75,24 @@ Ansible
 - All the resources for this project can be found at the following GitHub repository `GitHub Link <https://github.com/futuresystems/465-rahulbindra/tree/master/VisualizationProject>`_
 - Background information on the actual development of the code base (not part of this project/tutorial) can be found at the following link `Code Base <http://adilmoujahid.com/posts/2015/01/interactive-data-visualization-d3-dc-python-mongodb/>`_
 
+Two of the key resource files in the GitHub link are:
+
+- VMSetup.yaml: This file is used as an ansible playbook and comprises of commands that are used to set up the environment on the virtual machines. The steps completed in this file include:
+
+    - Downloading and configuring pip for package installation
+    - Installing and creating virtual environment
+    - Installing cloudmesh and cmd3
+    - Copying project reporsitory
+    - Installing Flask and pymongo
+
+- mongo.yaml: This file is used as an ansible playbook to install mongo db and load the project data into it from a web location.
+
 ======================================
 **Configuration and Deployment Steps**
 ======================================
 
 1. Create a new VM instance (ubuntu 14.04) by logging into `Horizon <https://openstack-j.india.futuresystems.org/horizon/>`_
-    Note the internal IP of the VM (IP_Internal). Execute the following commands to link an external IP (IP_External) to the VM 
-
-    nova floating-ip-create ext-net 
-
-    nova floating-ip-associate <VMName>
+    Note the internal IP of the VM (IP_Internal). 
 
 2. Log in to FutureSystems Portal via Putty
 
@@ -94,47 +102,57 @@ Ansible
     module load openstack
 
     source ~/.cloudmesh/clouds/india/juno/openrc.sh
-4. Copy the resources from project repository using the following command
+
+4. Execute the following commands to link an external IP (IP_External) to the VM 
+
+    nova floating-ip-create ext-net 
+
+    nova floating-ip-associate <VMName> <IPFromPreviousCommand>
+
+5. Copy the resources from project repository using the following command
     git clone https://github.com/futuresystems/465-rahulbindra
-5. Navigate to /465-rahulbindra/VisualizationProject/FuturesystemsArtifacts
+6. Navigate to /465-rahulbindra/VisualizationProject/FuturesystemsArtifacts
 
-6. Edit inventory.txt to add the actual internal IP instead of IP_Internal (in the file)
+7. Edit inventory.txt to add the actual internal IP instead of IP_Internal (in the file)
 
-7. Log in to virtual env using source command
+8. Log in to virtual env using source command
 
-8. Install ansible and upgrade pip using the following commands
+9. Install ansible and upgrade pip using the following commands
     pip install ansible
 
     pip install --upgrade pip
 
-9. Execute following commands to add identity for ssh access
-    eval $(ssh-agent -s)
+10. Execute following commands to add identity for ssh access
+    
+        eval $(ssh-agent -s)
 
-    ssh-add ~/.ssh/id_rsa
+        ssh-add ~/.ssh/id_rsa
 
-10. Set up the environment on VM by installing software pre-requisites using the following command
+11. Set up the environment on VM by installing software pre-requisites using the following command 
         ansible-playbook -i inventory.txt -c ssh VMSetup.yaml
 
-11. Install Mongo DB on VM and load data using the following command 
+12. Install Mongo DB on VM and load data using the following command 
         ansible-playbook -i inventory.txt -c ssh mongo.yaml
 
-12. Login to virtual machine using the following command 
+13. Login to virtual machine using the following command 
         ssh ubuntu@IP_Internal
 
-13. Log in to virtual environment already set up using the following command
+14. Log in to virtual environment already set up using the following command
         source ~/ENV/bin/activate
 
-14. Navigate to /465-rahulbindra/VisualizationProject/
+15. Navigate to /465-rahulbindra/VisualizationProject/
 
-15. Edit app.py to add the actual internal IP instead of IP_Internal (in the file)
+16. Edit app.py to add the actual internal IP instead of IP_Internal (in the file)
 
-16. Execute the following command to run the application
+17. Execute the following command to run the application
         sudo python app.py
 
-17. Go to browser and type the following url <IP_External>:5000
-        Note: Use the IP_External from point 1 above
+        If you face Flask module error, execute 'sudo pip install Flask'
 
-18. After VM use type exit to go back to FutureSystems (Putty)
+18. Go to browser and type the following url <IP_External>:5000
+        Note: Use the IP_External from point 4 above
 
-19. Execute the following command to delete the VM
+19. After VM use type exit to go back to FutureSystems (Putty)
+
+20. Execute the following command to delete the VM
         nova delete <VMName>
